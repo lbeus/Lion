@@ -88,10 +88,11 @@ function initTooltips() {
         });
     });
 }
-var hostname = document.location.hostname,
-    apiUrl = 'http://'+hostname+'/~josip/zavrsni/zavrsni/index.php/api/',
+var appPath = document.location.href.match(/http(.)+php/)[0],
+    apiUrl = appPath+'/api/',
     plot,
     sensors = [];
+
 
 var activeUnits = [];
 

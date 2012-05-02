@@ -65,7 +65,26 @@
 	</div>
 	<div id="banner-wrapper">
 	    <div id="banner">
-		<div class="image"><a href="#"><img src="<?php echo Yii::app()->request->baseUrl; ?>/images/pics02.jpg" width="900" height="257" alt="" /></a></div>
+		<div class="image">
+		<?php
+		    $this->widget('application.extensions.seqimage.seqimage.SeqImage',array(
+		    'widthImage' => 900,
+		    'heightImage' => 257,
+		    'slides'=>array(
+			array(
+			    'image'=>array('src'=>Yii::app()->request->baseUrl.'/images/presentation_1.jpg'),
+			    'link'=>array('url'=>'mypage','htmlOptions'=>array())
+			),
+			array(
+			    'image'=>array('src'=>Yii::app()->request->baseUrl.'/images/presentation_2.jpg'),
+			),
+			array(
+			    'image'=>array('src'=>Yii::app()->request->baseUrl.'/images/pics02.jpg'),
+			)
+		  )));
+		?>
+		</div>
+<!--		<div class="image"><a href="#"><img src="<?php //echo Yii::app()->request->baseUrl; ?>/images/pics02.jpg" width="900" height="257" alt="" /></a></div>-->
 		<div class="border"></div>
 	    </div>
 	</div>
@@ -112,7 +131,84 @@
 		    <p>Lion was developed by students<br/><br/>Matija Renić<br/>Luka Postružin<br/><br/>under supervision of dr.sc.Mario Žagar</p>
 		</div>
 	    </div>
-	    <?php else :?>
+	    <?php elseif ($this->breadcrumbs[0]=='Sensors') :?>
+		<div id="sidebar">
+		<div style="vertical-align:middle">
+		    <h2 class="title">Sensor map</h2>
+		<?php
+		    Yii::import('application.extensions.EGMap.*');
+
+		    $gMap = new EGMap();
+		    $gMap->setHeight(600);
+		    $gMap->setWidth(298);
+
+		    $gMap->zoom = 7;
+		    $mapTypeControlOptions = array(
+			'position' => EGMapControlPosition::LEFT_BOTTOM,
+			'style' => EGMap::MAPTYPECONTROL_STYLE_DROPDOWN_MENU
+		    );
+
+		    $gMap->mapTypeControlOptions = $mapTypeControlOptions;
+	    //centar je zagreb
+		    $gMap->setCenter(45.817, 15.983);
+
+		    $all_user_sensors = Yii::app()->db->createCommand()
+				    ->selectDistinct('s.*')
+				    ->from('di_sensors s')
+				    ->join('di_gsn_privileges p', 'p.gsn_id=s.gsn_id')
+				    ->where('p.user_id=:id', array(':id' => Yii::app()->user->id))
+				    ->queryAll();
+
+		    foreach ($all_user_sensors as $sensor) {
+			$last_measured_data = Yii::app()->db->createCommand(
+			    'SELECT 
+				u.unit_name
+			     ,	r.value
+			     ,	r.time_of_the_reading
+			     FROM
+			     (
+			     SELECT z.*, row_number() over (partition by z.sensor_id, z.unit_id order by time_of_the_reading desc) as rang
+			     (
+				SELECT *
+				FROM l_readings
+				UNION ALL f_readings
+			      ) z
+			      ) r
+			      JOIN di_sensors s ON r.sensor_id = s.sensor_id
+			      JOIN di_units u ON r.unit_id = u.unit_id
+			      WHERE 
+				1 = 1
+			      and r.rang = 1
+			      and s.sensor_id = '.$sensor['sensor_id']
+			)->queryAll();
+			$data = "";
+			foreach ($last_measured_data as $measured_data){
+			    $data .= "<br/>".$measured_data['unit_name'].": ".$measured_data['value'].", at ".$measured_data['time_of_the_reading'];
+			}
+
+			$info_window_a = new EGMapInfoWindow('<div>Sensor name ' . $sensor['sensor_user_name'] .$data .'</div>');
+			// Create marker for every sensor user can see
+			$icon = new EGMapMarkerImage("http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-128e4d/shapecolor-dark/shadow-1/border-white/symbolstyle-white/symbolshadowstyle-no/gradient-no/water.png");
+
+			$icon->setSize(32, 37);
+			$icon->setAnchor(16, 16.5);
+			$icon->setOrigin(0, 0);
+
+			$marker = new EGMapMarker($sensor['location_y'], $sensor['location_x'], array('title' => "Sensor " . $sensor['sensor_user_name'], 'icon' => $icon));
+
+			$marker->addHtmlInfoWindow($info_window_a);
+			$gMap->addMarker($marker);
+		    }
+
+	    // enabling marker clusterer just for fun
+	    // to view it zoom-out the map
+	    //$gMap->enableMarkerClusterer(new EGMapMarkerClusterer());
+
+		    $gMap->renderMap();
+		?>
+		</div>
+	    </div>
+		<?php else: ?>
 	    <div id="sidebar">
 		<div>
 		    <h2 class="title">About Lion</h2>

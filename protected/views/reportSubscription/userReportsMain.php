@@ -42,9 +42,9 @@ $this->breadcrumbs = array(
 	foreach ($all_user_sensors as $sensor) {
 	    $info_window_a = new EGMapInfoWindow('<div>Sensor name ' . $sensor['sensor_user_name'] . '</div>');
 	    // Create marker for every sensor user can see
-	    $icon = new EGMapMarkerImage("http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-128e4d/shapecolor-color/shadow-1/border-dark/symbolstyle-contrast/symbolshadowstyle-dark/gradient-iphone/water.png");
+	    $icon = new EGMapMarkerImage("http://mapicons.nicolasmollet.com/wp-content/uploads/mapicons/shape-default/color-128e4d/shapecolor-dark/shadow-1/border-white/symbolstyle-white/symbolshadowstyle-no/gradient-no/water.png");
 
-	    $icon->setSize(22, 22);
+	    $icon->setSize(32, 37);
 	    $icon->setAnchor(16, 16.5);
 	    $icon->setOrigin(0, 0);
 
