@@ -1,0 +1,51 @@
+/* APP CSS */
+
+
+#content {
+	width:960px;
+	padding-top:25px;
+	margin:0 auto;
+}
+
+.graph {
+	width:100%;
+	height:400px;
+}
+
+.sensor-name {
+	text-transform: capitalize;
+	font-weight: bold;
+}
+
+.nav-tabs.nav-stacked>li:first-child>a {
+	border-radius: 0;
+}
+
+	.sensor-name a {
+		width:70%;
+		float:left;
+	}
+
+	.sensor-name a.sensor-name-icon {
+		width: auto;
+		margin-left:-1px;
+	}
+
+.sensor-unit {
+	padding-left: 10px;
+	text-overflow: ellipsis;
+	overflow: hidden;
+}
+	.sensor-unit a {
+		text-transform: capitalize;
+	}
+
+	.sensor-unit span{
+		position:relative;
+		top:-4px;
+	}
+
+footer {
+	width:960px;
+	margin:0 auto;
+}

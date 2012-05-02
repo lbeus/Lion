@@ -1,0 +1,9 @@
+wp
+.buildpath
+.project
+.settings
+assets/*
+protected/runtime/*
+protected/data/*.db
+protected/tests/report/*
+

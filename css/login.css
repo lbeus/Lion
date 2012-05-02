@@ -1,0 +1,76 @@
+@CHARSET "UTF-8";
+
+/*picture of lion head position*/
+
+#picture-right
+{
+/*	width:200px;
+	margin:5em auto;
+	margin-right:5em;
+	float:right;*/
+	margin-top:25px;
+}
+
+#register_here
+{
+	background:#9fb1bf;
+	border:2px solid #f0f4f7;	
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-webkit-box-shadow:0 0 10px #4e707c;	
+	text-align:left;
+	margin-left:50px;	
+}
+
+/* login form */
+
+#login-form
+{
+	background:#f0f4f7;
+	border:2px solid #9fb1bf;
+	-moz-border-radius:5px;
+	-webkit-border-radius:5px;
+	border-radius:5px;
+	-webkit-box-shadow:0 0 10px #4e707c;
+	text-align:left;
+	margin-left:50px;
+}
+
+#login-form a, #login-form a:visited{color:#0283b2;}
+
+#login-form a:hover{color:#111;}
+
+#login_username, #login_password
+{
+	font-size: medium;
+	width: 75%;
+}
+
+#login-form div.curFocus 
+{
+   background: #206e56;
+   color:#FFF;
+}
+
+#login-form p{margin:.5em 25px;}
+#login-form div
+{
+	margin:.5em 25px;
+	color: #036;
+
+	-webkit-border-radius:5px;
+
+	text-align:right;
+	position:relative;
+}
+
+#login-form label
+{
+	float:left;
+	line-height:30px;
+	padding-left:10px;
+}
+
+#login-form .forgot{text-align:right;font-size:11px;}
+#login-form .back{padding:1em 0;border-top:1px solid #eee;text-align:right;font-size:11px;}
