@@ -1,23 +1,32 @@
 <?php
-$this->breadcrumbs=array(
-	'Di Sensors'=>array('index'),
-	$model->sensor_id,
-);
-
-$this->menu=array(
-	array('label'=>'List DiSensors', 'url'=>array('index')),
-	array('label'=>'Create DiSensors', 'url'=>array('create')),
-	array('label'=>'Update DiSensors', 'url'=>array('update', 'id'=>$model->sensor_id)),
-	array('label'=>'Delete DiSensors', 'url'=>'#', 'linkOptions'=>array('submit'=>array('delete','id'=>$model->sensor_id),'confirm'=>'Are you sure you want to delete this item?')),
-	array('label'=>'Manage DiSensors', 'url'=>array('admin')),
+$this->breadcrumbs = array(
+    'Sensors' => array('diSensors/index'),
+    $model->sensor_id,
+    'View',
 );
 ?>
+<div class="post">
+    <p class="date"><?php echo date("M"); ?><b><?php echo date("j"); ?></b></p>
+    <h2 class="title">Sensor administration</h2>
+    <p class="posted">Lion development team</p>
+    <div class="entry">
 
-<h1>View DiSensors #<?php echo $model->sensor_id; ?></h1>
+	<p>If you need further managing, proceed with following links:</p>
+	<?php
+	echo "<ul>";
+	echo "<li>" . CHtml::link('Create sensors', array('diSensors/create')) . "</li>";
+	echo "<li>" . CHtml::link('Manage sensors', array('diSensors/admin')) . "</li>";
+	echo "<li>" . CHtml::link('List sensors', array('diSensors/index')) . "</li>";
+	//echo "<li>" . CHtml::link('Delete sensors', array('diSensors/delete', 'id' => $model->gsn_id)) . "</li>";
+	echo "<li>" . CHtml::link('Update sensors', array('diSensors/update', 'id' => $model->sensor_id)) . "</li>";
+	echo "</ul>";
+	?>
+	<h1>View DiSensors #<?php echo $model->sensor_id; ?></h1>
 
-<?php $this->widget('zii.widgets.CDetailView', array(
-	'data'=>$model,
-	'attributes'=>array(
+	<?php
+	$this->widget('zii.widgets.CDetailView', array(
+	    'data' => $model,
+	    'attributes' => array(
 		'sensor_id',
 		'sensor_name',
 		'sensor_user_name',
@@ -30,5 +39,8 @@ $this->menu=array(
 		'is_active',
 		'is_dummy',
 		'is_real_sensor',
-	),
-)); ?>
+	    ),
+	));
+	?>
+    </div>
+</div>

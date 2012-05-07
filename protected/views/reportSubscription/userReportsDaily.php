@@ -118,7 +118,7 @@ $this->breadcrumbs = array(
                     Yii::import('application.extensions.EGMap.*');
 
                     $gMap = new EGMap();
-                    $gMap->setWidth(200);
+                    $gMap->setWidth(550);
 // it can also be called $gMap->height = 400;
                     $gMap->setHeight(200);
                     $gMap->zoom = 10;

@@ -1,4 +1,4 @@
-<div class="view">
+<div class="roundedBox" id="type1">
 
 	<b><?php echo CHtml::encode($data->getAttributeLabel('sensor_id')); ?>:</b>
 	<?php echo CHtml::link(CHtml::encode($data->sensor_id), array('view', 'id'=>$data->sensor_id)); ?>
@@ -51,4 +51,5 @@
 
 	*/ ?>
 
+    <div class="corner topLeft"></div><div class="corner topRight"></div><div class="corner bottomLeft"></div><div class="corner bottomRight"></div>
 </div>

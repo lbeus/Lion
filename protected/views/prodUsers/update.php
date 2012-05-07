@@ -1,18 +1,28 @@
 <?php
-$this->breadcrumbs=array(
-	'Prod Users'=>array('index'),
-	$model->user_id=>array('view','id'=>$model->user_id),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List ProdUsers', 'url'=>array('index')),
-	array('label'=>'Create ProdUsers', 'url'=>array('create')),
-	array('label'=>'View ProdUsers', 'url'=>array('view', 'id'=>$model->user_id)),
-	array('label'=>'Manage ProdUsers', 'url'=>array('admin')),
+$this->breadcrumbs = array(
+    'Users' => array('prodUsers/index'),
+    'Update user',
 );
 ?>
 
-<h1>Update ProdUsers <?php echo $model->user_id; ?></h1>
+<div class="post">
+    <p class="date"><?php echo date("M"); ?><b><?php echo date("j"); ?></b></p>
+    <h2 class="title">Update user, <?php echo $model->user_id; ?></h2>
+    <p class="posted">Lion development team</p>
+    <div class="entry">
+	<p>If you need further managing, proceed with following links:</p>
+	<?php
+	echo "<ul>";
+	echo "<li>".  CHtml::link('<span>GSN privileges</span>', array('/admin/adminGsnPrivileges'))."</li>";
+	echo "<li>" . CHtml::link('Create user', array('prodUsers/create')) . "</li>";
+	echo "<li>" . CHtml::link('Manage users', array('prodUsers/admin')) . "</li>";
+	echo "<li>" . CHtml::link('List users', array('prodUsers/index')) . "</li>";
+	echo "<li>" . CHtml::link('View user', array('prodUsers/view', 'id' => $model->user_id)) . "</li>";
+	echo "</ul>";
+	?>
+	<h1>Update user <?php echo $model->user_id; ?></h1>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	<?php echo $this->renderPartial('_form', array('model' => $model)); ?>
+
+    </div>
+</div>

@@ -1,15 +1,23 @@
 <?php
-$this->breadcrumbs=array(
-	'Di Sensors'=>array('index'),
-	'Create',
-);
-
-$this->menu=array(
-	array('label'=>'List DiSensors', 'url'=>array('index')),
-	array('label'=>'Manage DiSensors', 'url'=>array('admin')),
+$this->breadcrumbs = array(
+    'Sensors' => array('diSensors/index'),
+    'Create sensor',
 );
 ?>
+<div class="post">
+    <p class="date"><?php echo date("M"); ?><b><?php echo date("j"); ?></b></p>
+    <h2 class="title">Create sensor</h2>
+    <p class="posted">Lion development team</p>
+    <div class="entry">
 
-<h1>Create DiSensors</h1>
+	<p>If you need further managing, proceed with following links:</p>
+	<?php
+	echo "<ul>";
+	echo "<li>" . CHtml::link('Manage sensors', array('diSensors/admin')) . "</li>";
+	echo "<li>" . CHtml::link('List sensors', array('diSensors/index')) . "</li>";
+	echo "</ul>";
+	?>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+	<?php echo $this->renderPartial('_form', array('model' => $model)); ?>
+    </div>
+</div>

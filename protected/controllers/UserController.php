@@ -71,6 +71,21 @@ class UserController extends Controller {
     }
 
     /**
+     * Actions for the notification dropdown menus
+     */
+    public function actionWatchdogDynamicSensors() {
+        $data = DiSensors::model()->findAll('gsn_id=:parent_id',
+                        array(':parent_id' => (int) $_POST['UserWatchdogTimer']['gsn_list']));
+
+
+        $data = CHtml::listData($data, 'sensor_id', 'sensor_user_name');
+        echo CHtml::tag('option', array('value' => 0), 'Select', true);
+        foreach ($data as $id => $value) {
+            echo CHtml::tag('option', array('value' => $id), CHtml::encode($value), true);
+        }
+    }
+
+    /**
      * Displays the notifications page
      */
     public function actionUserNotifications() {
@@ -395,8 +410,8 @@ class UserController extends Controller {
      * All watchdog timer requests - user managing
      */
     public function actionUserWatchdogRequests() {
-        // $model = new UserSmsWatchdogRequests;
-        //if administrator has chosen any notification request we need to provide this request (approve, decline)
+         //$model = new UserEmailWatchdogRequests;
+        //if administrator has chosen any watchdog request we need to provide this request (approve, decline)
         if (isset($_REQUEST['watchdog_id']) && (isset($_REQUEST['type']))) {
             if ($_REQUEST['type'] != "SMS") {
                 $headers = "From: " . Yii::app()->params['adminEmail'] . "\r\nReply-To: " . Yii::app()->params['adminEmail'];
@@ -428,7 +443,7 @@ class UserController extends Controller {
                                 $sftp_obj->chdir($gsn_row['notification_folder']);
                                 $sftp_obj->removeFile($email_notification->xml_name . ".xml");
                             } catch (Exception $er) {
-                                $body = $body . "Primary notification was not succesfully removed. Please check the problem!\nError message " . $er->getMessage() . "\n";
+                                $body = $body . "Primary watchdog timer was not succesfully removed. Please check the problem!\nError message " . $er->getMessage() . "\n";
                             }
 
                             try {
@@ -445,9 +460,9 @@ class UserController extends Controller {
                             }
                             //if this was successful we need to inform our administrator about the action
                             if ($body == "")
-                                $body = "File was succesfully removed!\nGSN name: " . $gsn_row['gsn_name'] . "Notification ID: " . $email_notification->nofitication_id;
+                                $body = "File was succesfully removed!\nGSN name: " . $gsn_row['gsn_name'] . "Watchdog ID: " . $email_notification->watchdog_id;
                         } catch (Exception $e) {
-                            $body = "File was NOT successfully removed! Please make a manual check on the problem!\nIt seems that the connection could not be established.\nNotification ID: " . $email_notification->notification_id . "\nError message: " . $e->getMessage();
+                            $body = "File was NOT successfully removed! Please make a manual check on the problem!\nIt seems that the connection could not be established.\nWatchdog ID: " . $email_notification->watchdog_id . "\nError message: " . $e->getMessage();
                         }
 
                         //mail("hyracoidea@gmail.com", $subject, $start . "\n" . $body . "Notification request deleting process finished! Time: " . date('Y-m-d H:i:s'), $headers);
@@ -458,21 +473,21 @@ class UserController extends Controller {
                             $body.="\nWatchdogTimer could not be deleted!";
                     }
                     else
-                        $body = "Something went wrong when acquiring data for the GSN!\nNotification ID: " . $email_notification->notification_id;
+                        $body = "Something went wrong when acquiring data for the GSN!\nNotification ID: " . $email_notification->watchdog_id;
                 }
                 else
-                    $body = "There was no email notification request with Notification ID: " . $_REQUEST['notification_id'];
+                    $body = "There was no email notification request with Notification ID: " . $_REQUEST['watchdog_id'];
 
                 mail("hyracoidea@gmail.com", $subject, $start . "\n" . $body . "WatchdogTimer request deleting process finished! Time: " . date('Y-m-d H:i:s'), $headers);
             }
             else {
                 $headers = "From: " . Yii::app()->params['adminEmail'] . "\r\nReply-To: " . Yii::app()->params['adminEmail'];
-                $subject = "Email Notification approval/disapproval";
+                $subject = "SMS Watchdog approval/disapproval";
                 $body = "";
                 //if administrator has chosen any notification request we need to provide this request (approve, decline)
-                $start = "Notification request deleting process started! Time: " . date('Y-m-d H:i:s');
+                $start = "Watchdog timer request deleting process started! Time: " . date('Y-m-d H:i:s');
 
-                $email_notification = new ProdEmailWatchdogTimer;
+                $sms_notification = new ProdSmsWatchdogTimer;
 
                 $sms_notification = ProdSmsWatchdogTimer::model()->findByAttributes(array('watchdog_id' => $_REQUEST['watchdog_id']));
                 //if we find a row that equals this one, we do nothing at all
@@ -495,7 +510,7 @@ class UserController extends Controller {
                                 $sftp_obj->chdir($gsn_row['notification_folder']);
                                 $sftp_obj->removeFile($sms_notification->xml_name . ".xml");
                             } catch (Exception $er) {
-                                $body = $body . "Primary notification was not succesfully removed. Please check the problem!\nError message " . $er->getMessage() . "\n";
+                                $body = $body . "Primary watchdog was not succesfully removed. Please check the problem!\nError message " . $er->getMessage() . "\n";
                             }
 
                             try {
@@ -512,9 +527,9 @@ class UserController extends Controller {
                             }
                             //if this was successful we need to inform our administrator about the action
                             if ($body == "")
-                                $body = "File was succesfully removed!\nGSN name: " . $gsn_row['gsn_name'] . "Notification ID: " . $sms_notification->nofitication_id;
+                                $body = "File was succesfully removed!\nGSN name: " . $gsn_row['gsn_name'] . "Watchdog ID: " . $sms_notification->watchdog_id;
                         } catch (Exception $e) {
-                            $body = "File was NOT successfully removed! Please make a manual check on the problem!\nIt seems that the connection could not be established.\nNotification ID: " . $email_notification->notification_id . "\nError message: " . $e->getMessage();
+                            $body = "File was NOT successfully removed! Please make a manual check on the problem!\nIt seems that the connection could not be established.\nWatchdog ID: " . $sms_notification->watchdog_id . "\nError message: " . $e->getMessage();
                         }
 
                         //mail("hyracoidea@gmail.com", $subject, $start . "\n" . $body . "Notification request deleting process finished! Time: " . date('Y-m-d H:i:s'), $headers);
@@ -525,18 +540,19 @@ class UserController extends Controller {
                             $body.="\nWatchdogTimer could not be deleted!";
                     }
                     else
-                        $body = "Something went wrong when acquiring data for the GSN!\nNotification ID: " . $sms_notification->notification_id;
+                        $body = "Something went wrong when acquiring data for the GSN!\nWatchdog ID: " . $sms_notification->watchdog_id;
                 }
                 else
-                    $body = "There was no email notification request with Notification ID: " . $_REQUEST['notification_id'];
+                    $body = "There was no email notification request with Notification ID: " . $_REQUEST['watchdod_id'];
 
                 mail("hyracoidea@gmail.com", $subject, $start . "\n" . $body . "WatchdogTimer request deleting process finished! Time: " . date('Y-m-d H:i:s'), $headers);
             }
         }
 
-        $this->layout = 'watchdog_template';
-        $this->render('userWatchdogTimerRequests', array('model' => $model));
-    }
+        //$this->layout = 'watchdog_template';
+        //$this->render('userWatchdogTimerRequests', array('model' => $model));
+   	$this->render('userWatchdogTimerRequests'); 
+   }
 
     /**
      * Displays the user watchdog page
@@ -545,7 +561,7 @@ class UserController extends Controller {
 
         $model = new UserWatchdogTimer;
 
-        $this->layout = 'watchdog_template';
+        //$this->layout = 'watchdog_template';
 
         $model->watchdog_type = ((int) !empty($_POST['UserWatchdogTimer']['watchdog_type']) ? $_POST['UserWatchdogTimer']['watchdog_type'] : ((int) !empty($_GET['watchdog_type']) ? $_GET['watchdog_type'] : 99999));
 
@@ -564,7 +580,7 @@ class UserController extends Controller {
         if (isset($_POST['UserWatchdogTimer'])) {
             $model->attributes = $_POST['UserWatchdogTimer'];
 
-            if ($model->notification_type == 1) { //we are dealing with sms notification
+            if ($model->watchdog_type == 1) { //we are dealing with sms notification
                 $model_notifications = new ProdSmsWatchdogTimer;
 
                 $model_notifications->sensor_id = $model->sensor_id;

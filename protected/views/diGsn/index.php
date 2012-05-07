@@ -1,17 +1,26 @@
 <?php
-$this->breadcrumbs=array(
-	'Di Gsns',
-);
-
-$this->menu=array(
-	array('label'=>'Create DiGsn', 'url'=>array('create')),
-	array('label'=>'Manage DiGsn', 'url'=>array('admin')),
+$this->breadcrumbs = array(
+    'GSN Servers',
 );
 ?>
+<div class="post">
+    <p class="date"><?php echo date("M"); ?><b><?php echo date("j"); ?></b></p>
+    <h2 class="title">GSN server table</h2>
+    <p class="posted">Lion development team</p>
+    <div class="entry">
+	<p>If you need further managing, proceed with following links:</p>
+	<?php
+	echo "<ul>";
+	echo "<li>" . CHtml::link('Create DiGsn', array('diGsn/create')) . "</li>";
+	echo "<li>" . CHtml::link('Manage DiGsn', array('diGsn/admin')) . "</li>";
+	echo "</ul>";
+	?>
+	<?php
+	$this->widget('zii.widgets.CListView', array(
+	    'dataProvider' => $dataProvider,
+	    'itemView' => '_view',
+	));
+	?>
 
-<h1>Di Gsns</h1>
-
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
+    </div>
+</div>

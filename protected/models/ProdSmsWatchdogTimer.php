@@ -261,18 +261,18 @@ class ProdSmsWatchdogTimer extends CActiveRecord
                 '                          def timeDifferenceMinutes = timeDifference/60000;'."\n".         
                 '                          def timeDifferenceSecunds = timeDifference%60000;'."\n".
                 '                          def criticalPeriodMinutes = criticalPeriod/60000;'."\n".
-                '                          def criticalPeriodSecunds = criticalPeriod%60000;'."\n".
+                '                          def criticalPeriodSeconds = criticalPeriod%60000;'."\n".
                 '                          if (timeDifference >= criticalPeriod) {'."\n".
-                '        	                      switch(notificationState){'"\n".
+                '        	                      switch(notificationState){'."\n".
                 '        			                  case 0: break;'."\n".      			
                 '        			                  case 1: '."\n".
-                '            				                    smsContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\n senzor \' + sensorName + \' nije primio poruku \' + timeDifferenceMinutes + \' min\' + timeDifferenceSecunds \'s !!!\nKriticni period je \' +criticalPeriodMinutes + \'min\' + criticalPeriodSecunds \'s !\';'."\n".                                                     
+                '                                               smsContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\\n senzor \' + sensorName + \' je prestao primati ocitanja!!!\\nOve obavijesti sustav salje ukoliko osjetilo nije primilo ocitanje barem \' +criticalPeriodMinutes + \' min\' + criticalPeriodSeconds + \' s !\';'."\n". 
 				'												sendSMS(recipients, smsContent);'."\n".
 				'												updateNotificationVSXMLState(filePath, 2);'."\n".
 				'												updateNotificationVSXMLErrorMessageTime(filePath, currentTime);'."\n".
-				'												break;'"\n".	
+				'												break;'."\n".	
                 '            		                  case 2: '."\n".
-				'            				                  smsContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\n senzor \' + sensorName + \' nije primio poruku \' + timeDifferenceMinutes + \' min\' + timeDifferenceSecunds \'s !!!\nKriticni period je \' +criticalPeriodMinutes + \'min\' + criticalPeriodSecunds \'s !\nObavijesti mozete iskljuciti na linku http://www.gsn.com?watchdog_id='.$id.'\';'."\n". 
+				'                                             smsContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\\n senzor \' + sensorName + \' je prestao primati ocitanja!!!\\nOve obavijesti sustav salje ukoliko osjetilo nije primilo ocitanje barem \' +criticalPeriodMinutes + \'min\' + criticalPeriodSeconds + \' s !\\nObavijesti mozete iskljuciti na linku http://www.gsn.com?watchdog_id='.$id.'\';'."\n". 
                 '            				                  if((currentTime-lastErrorMessageTime) >= delay ){'."\n".
                 '                                               sendSMS(recipients, smsContent);'."\n".
                 '                                               updateNotificationVSXMLErrorMessageTime(filePath, currentTime);'."\n".

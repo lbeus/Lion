@@ -1,18 +1,25 @@
 <?php
-$this->breadcrumbs=array(
-	'Di Gsns'=>array('index'),
-	$model->gsn_id=>array('view','id'=>$model->gsn_id),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List DiGsn', 'url'=>array('index')),
-	array('label'=>'Create DiGsn', 'url'=>array('create')),
-	array('label'=>'View DiGsn', 'url'=>array('view', 'id'=>$model->gsn_id)),
-	array('label'=>'Manage DiGsn', 'url'=>array('admin')),
+$this->breadcrumbs = array(
+    'GSN Servers' => array('diGsn/index'),
+    'Update GSN',
 );
 ?>
 
-<h1>Update DiGsn <?php echo $model->gsn_id; ?></h1>
+<div class="post">
+    <p class="date"><?php echo date("M"); ?><b><?php echo date("j"); ?></b></p>
+    <h2 class="title">Update GSN server, <?php echo $model->gsn_id; ?></h2>
+    <p class="posted">Lion development team</p>
+    <div class="entry">
+	<p>If you need further managing, proceed with following links:</p>
+	<?php
+	echo "<ul>";
+	echo "<li>" . CHtml::link('Create DiGsn', array('diGsn/create')) . "</li>";
+	echo "<li>" . CHtml::link('Manage DiGsn', array('diGsn/admin')) . "</li>";
+	echo "<li>" . CHtml::link('List DiGsn', array('diGsn/index')) . "</li>";
+	echo "<li>" . CHtml::link('View DiGsn', array('diGsn/view','id'=>$model->gsn_id)) . "</li>";
+	echo "</ul>";
+	?>
+	<?php echo $this->renderPartial('_form', array('model' => $model)); ?>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+    </div>
+</div>

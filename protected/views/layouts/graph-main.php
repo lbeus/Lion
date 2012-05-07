@@ -61,7 +61,7 @@
 	<?php endif?>
 
 
-	<div class="container" role="main">
+	<div id="content" class="container" role="main">
 		<?php echo $content; ?>
 	</div>
 

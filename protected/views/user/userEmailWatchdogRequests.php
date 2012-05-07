@@ -1,7 +1,7 @@
 <?php
-$this->pageTitle=Yii::app()->name . ' - Email watchdog timers';
+$this->pageTitle=Yii::app()->name . ' - Email watchdog requests';
 $this->breadcrumbs=array(
-	'Email watchdog timers',
+	'Email watchdog requests',
 );
 ?>
 

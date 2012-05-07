@@ -52,6 +52,10 @@
 			<li <?php if ($this->breadcrumbs[0] == "GSN") echo 'class="first"' ?>><?php echo CHtml::link('<span>GSN</span>', array('/user/userGsnList')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Sensors") echo 'class="first"' ?>><?php echo CHtml::link('<span>Sensors</span>', array('/user/userSensors')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Notification" || $this->breadcrumbs[0]=='Email notifications') echo 'class="first"' ?>><?php echo CHtml::link('<span>Notifications</span>', array('/user/userNotifications')); ?></li>
+
+			<li <?php if ($this->breadcrumbs[0] == "Watchdog timers") echo 'class="first"' ?>><?php echo CHtml::link('<span>Watchdog</span>', array('/user/userWatchdogTimer')); ?></li>
+
+
 			<li <?php if ($this->breadcrumbs[0] == "Reports") echo 'class="first"' ?>><?php echo CHtml::link('<span>Reports</span>', array('/reportSubscription/userReportsMain')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Graphs") echo 'class="first"' ?>><?php echo CHtml::link('<span>Graphs</span>', array('/graphs/graphs')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Contact")echo 'class="first"' ?>><?php echo CHtml::link('<span>Contact</span>', array('/site/contact')); ?></li>
@@ -85,13 +89,7 @@
 		?>
 		</div>
 <!--		<div class="image"><a href="#"><img src="<?php //echo Yii::app()->request->baseUrl; ?>/images/pics02.jpg" width="900" height="257" alt="" /></a></div>-->
-		<div class="border"></div>
-	    </div>
-	</div>
-	<div id="page">
-	    <div class="bgtop"></div>
-	    <div class="content-bg">
-		<div id="content">
+		<div class="border">
 		    <?php if (isset($this->breadcrumbs)): ?>
 			<?php
 			    $this->widget('zii.widgets.CBreadcrumbs', array(
@@ -99,6 +97,13 @@
 			    ));
 			?><!-- breadcrumbs -->
 		    <?php endif ?>
+		</div>
+	    </div>
+	</div>
+	<div id="page">
+	    <div class="bgtop"></div>
+	    <div class="content-bg">
+		<div id="content">
 		    <?php echo $content; ?>
 		</div>
 
@@ -114,6 +119,22 @@
 		    </p>
 		</div>
 	    </div>
+
+
+
+	  <?php elseif ($this->breadcrumbs[0]=='Watchdog timers' || $this->breadcrumbs[0]=='Watchdog timer requests') : ?>
+		    <div id="sidebar">
+			<div>
+			    <h2 class="title">Sidemenu</h2>
+			    <p>
+				<ul>
+				    <li <?php if ($this->breadcrumbs[0] == "Watchdog timers") echo 'class="first"' ?>><?php echo CHtml::link('<span>New watchdog timer</span>', array('/user/userWatchdogTimer')); ?></li>
+				    <li <?php if ($this->breadcrumbs[0] == "Watchdog timer requests") echo 'class="first"' ?>><?php echo CHtml::link('<span>Watchdog timer requests</span>', array('/user/userWatchdogRequests')); ?></li>
+				</ul>
+			    </p>
+			</div>
+		    </div>
+
 	    <?php elseif ($this->breadcrumbs[0]=='New report subscription' || $this->breadcrumbs[0]=='Report subscriptions' || $this->breadcrumbs[0]=='Monthly reports' || $this->breadcrumbs[0]=='Daily reports' || $this->breadcrumbs[0]=='Reports') :?>
 	    <div id="sidebar">
 		<div>
@@ -168,10 +189,10 @@
 			     FROM
 			     (
 			     SELECT z.*, row_number() over (partition by z.sensor_id, z.unit_id order by time_of_the_reading desc) as rang
+			     FROM
 			     (
 				SELECT *
 				FROM l_readings
-				UNION ALL f_readings
 			      ) z
 			      ) r
 			      JOIN di_sensors s ON r.sensor_id = s.sensor_id

@@ -1,18 +1,26 @@
 <?php
-$this->breadcrumbs=array(
-	'Di Sensors'=>array('index'),
-	$model->sensor_id=>array('view','id'=>$model->sensor_id),
-	'Update',
-);
-
-$this->menu=array(
-	array('label'=>'List DiSensors', 'url'=>array('index')),
-	array('label'=>'Create DiSensors', 'url'=>array('create')),
-	array('label'=>'View DiSensors', 'url'=>array('view', 'id'=>$model->sensor_id)),
-	array('label'=>'Manage DiSensors', 'url'=>array('admin')),
+$this->breadcrumbs = array(
+    'Sensors' => array('diSensors/index'),
+    'Update sensor',
 );
 ?>
+<div class="post">
+    <p class="date"><?php echo date("M"); ?><b><?php echo date("j"); ?></b></p>
+    <h2 class="title">Update sensor, <?php echo $model->sensor_id; ?></h2>
+    <p class="posted">Lion development team</p>
+    <div class="entry">
+	<p>If you need further managing, proceed with following links:</p>
+	<?php
+	echo "<ul>";
+	echo "<li>" . CHtml::link('Create sensors', array('diSensors/create')) . "</li>";
+	echo "<li>" . CHtml::link('Manage sensors', array('diSensors/admin')) . "</li>";
+	echo "<li>" . CHtml::link('List sensors', array('diSensors/index')) . "</li>";
+	echo "<li>" . CHtml::link('View sensors', array('diSensors/view', 'id' => $model->sensor_id)) . "</li>";
+	echo "</ul>";
+	?>
+	<h1>Update DiSensors <?php echo $model->sensor_id; ?></h1>
 
-<h1>Update DiSensors <?php echo $model->sensor_id; ?></h1>
+	<?php echo $this->renderPartial('_form', array('model' => $model)); ?>
 
-<?php echo $this->renderPartial('_form', array('model'=>$model)); ?>
+    </div>
+</div>

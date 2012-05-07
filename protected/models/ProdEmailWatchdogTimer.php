@@ -1,5 +1,7 @@
 <?php
 
+include('file_helper.php');
+
 /**
  * This is the model class for table "prod_email_watchdog_timer".
  *
@@ -85,7 +87,7 @@ class ProdEmailWatchdogTimer extends CActiveRecord
 
                             $sftp_obj->chdir($gsn_row['notification_folder']);
                             $sftp_obj->sendFile($returned_xml, $this->xml_name . ".xml");
-                            $body .= "\nNotification has been successfully deployed on the given location!\nNotification ID: " . $this->notification_id;
+                            $body .= "\nNotification has been successfully deployed on the given location!\nNotification ID: " . $this->watchdog_id;
                         } catch (Exception $er) {
                             $body .= "\nNotification has not been successfully deployed on the given location!\nError message: " . $er->getMessage();
                         }
@@ -98,7 +100,7 @@ class ProdEmailWatchdogTimer extends CActiveRecord
 
                             $sftp_obj->chdir($gsn_row['notification_backup_folder']);
                             $sftp_obj->sendFile($returned_xml, $this->xml_name . ".xml");
-                            $body .= "\nNotification backup has been successfully deployed on the given location!\nNotification ID: " . $this->notification_id;
+                            $body .= "\nNotification backup has been successfully deployed on the given location!\nNotification ID: " . $this->watchdog_id;
                         } catch (Exception $er) {
                             $body .= "\nNotification backup has not been successfully deployed on the given location!\nError message: " . $er->getMessage();
                         }
@@ -107,7 +109,7 @@ class ProdEmailWatchdogTimer extends CActiveRecord
                     }
                 }
                 else
-                    $body = $body . "Something went wrong when acquiring data for the GSN!\nNotification ID: " . $this->notification_id;
+                    $body = $body . "Something went wrong when acquiring data for the GSN!\nNotification ID: " . $this->watchdog_id;
             }
             else
                 $body = $body . "\nFor some reason XML file was not saved properly in the variable and program did not stop!Exit command does not work properly!\n";
@@ -135,7 +137,7 @@ class ProdEmailWatchdogTimer extends CActiveRecord
 			array('critical_period, period_script, minimal_delay_between_emails', 'safe'),
 			// The following rule is used by search().
 			// Please remove those attributes that should not be searched.
-			array('watchdog_id, time_watchdog_asked, time_watchdog_approved, is_active, sensor_id, user_id, sensor_name, xml_name, critical_period, period_script, minimal_delay_between_emails, email', 'safe', 'on'=>'search'),
+			array('watchdog_id, time_watchdog_asked, time_watchdog_approved, is_active, sensor_id, user_id, sensor_name, xml_name, critical_period, minimal_delay_between_emails, email', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -203,107 +205,104 @@ class ProdEmailWatchdogTimer extends CActiveRecord
 	
 	public function email_xml_file($id) 
 	{
-        $email_notification = new ProdEmailWatchdogTimer;
-        $email_notification = ProdEmailWatchdogTimer::model()->findByAttributes(array('watchdog_id' => $id));
+		$email_notification = new ProdEmailWatchdogTimer;
+		$email_notification = ProdEmailWatchdogTimer::model()->findByAttributes(array('watchdog_id' => $id));
 
-        $sensor_data = new DiSensors();
-        $sensor_data = DiSensors::model()->findByAttributes(array('sensor_id' => $email_notification['sensor_id']));
+		$sensor_data = new DiSensors();
+		$sensor_data = DiSensors::model()->findByAttributes(array('sensor_id' => $email_notification['sensor_id']));
 
-        $gsn_data = new DiGsn();
-        $gsn_data = DiGsn::model()->findByAttributes(array('gsn_id' => $sensor_data['gsn_id']));
+		$gsn_data = new DiGsn();
+		$gsn_data = DiGsn::model()->findByAttributes(array('gsn_id' => $sensor_data['gsn_id']));
 
-        $user_data = new ProdUsers();
-        $user_data = ProdUsers::model()->findByAttributes(array('user_id' => $email_notification['user_id']));
+		$user_data = new ProdUsers();
+		$user_data = ProdUsers::model()->findByAttributes(array('user_id' => $email_notification['user_id']));
 
-        $xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
-                '<virtual-sensor name="' . $email_notification['xml_name'].'" priority="10">' . "\n" .
-                '  <processing-class>' . "\n" .
-                '    <class-name>gsn.processor.ScriptletProcessor</class-name>' . "\n" .
-                '    <init-params>' . "\n" .
-                '      <param name="persistant">false</param>' . "\n" .
-                '      <param name="notification-state">1</param>' . "\n" .
-                '      <param name="scriptlet"><![CDATA[' . "\n" .
-                '                    //this is a start of a scriptlet' . "\n" .
-                '                    //data definition' . "\n" .
-                '' . "\n" .
-                '                    lastProcessedTime = System.currentTimeMillis();  '. "\n" .
-                '                    def filePath ="virtual-sensors/' . $email_notification['xml_name'] . '.xml";' . "\n" .
-                '                    def recipients = ["' . $email_notification['email'] . '"]; // Define one or more recipients' . "\n" .
-                '                    def criticalValue = ' . $email_notification['critical_period'] . ';' . "\n" .
-                '' . "\n" .
-                '' . "\n" .
-                '                    def EmailTitle ="Obavijest sustava GSN!!!";' . "\n" .
-                '                    def emailContent="";' . "\n" .
-                ' ' . "\n" .
-                '                    //end of data definition' . "\n" .
-                ' ' . "\n" .
-                ' ' . "\n" .
-                '					 if (notificationState == 0){ '. "\n" .
-                '    	             	updateNotificationVSXMLState(filePath, 1); '. "\n" .
-                '                       emailContent=\'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\n nadzor senzora \' + sensorName + \' je ponovno ukljucen!!!\'; '."\n".
-                '                       sendEmail(recipients, emailTitle, emailContent); '. "\n" .
-                '                    }else if (notificationState == 2){  '."\n".
-                '    	                updateNotificationVSXMLState(filePath, 1); '."\n".
-                '                       emailContent=\'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\n senzor \' + sensorName + \' je proradio!!!\'; '."\n".
-                '                       sendEmail(recipients, emailTitle, emailContent); '."\n".
-                '                    }]]></param>' . "\n" .
-                '      <param name="sensor-name">'.$sensor_data['sensor_name'].'</param>'. "\n" .
-                '      <param name="last-error-message-time">0</param>'. "\n" .
-				'	   <param name="delay">'.$email_notification['minimal_delay_between_emails'].'</param>'. "\n" .
-                '      <param name="period">'.$email_notification['critical_period'].'</param>'. "\n" .
-				'	   <param name="scriplet-periodic"><![CDATA['. "\n".
-				'                    def filePath ="virtual-sensors/' . $email_notification['xml_name'] . '.xml";' . "\n" .
-				'                    def recipients = ["' . $email_notification['email'] . '"]; // Define one or more recipients' . "\n" .	
-				'					 def emailTitle =\'\';'."\n".
-                '                    def emailContent=\'\';'."\n".
-                     
-                '                    def currentTime = System.currentTimeMillis();'."\n\n".
-                '                    if ( ! isdef(\'lastProcessedTime\')) { '. "\n".
-                '                          lastProcessedTime = currentTime;'."\n".
-                '                    }'."\n".
-                '                    else {'."\n".
-                '                          def timeDifference = currentTime - lastProcessedTime;'."\n".
-                '                          def timeDifferenceMinutes = timeDifference/60000;'."\n".         
-                '                          def timeDifferenceSecunds = timeDifference%60000;'."\n".
-                '                          def criticalPeriodMinutes = criticalPeriod/60000;'."\n".
-                '                          def criticalPeriodSecunds = criticalPeriod%60000;'."\n".
-                '                          if (timeDifference >= criticalPeriod) {'."\n".
-                '        	                      switch(notificationState){'"\n".
-                '        			                  case 0: break;'."\n".      			
-                '        			                  case 1:	emailTitle = \'Obavijest sustava GSN\';'."\n".
-                '            				                    emailContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\n senzor \' + sensorName + \' nije primio poruku \' + timeDifferenceMinutes + \' min\' + timeDifferenceSecunds \'s !!!\nKriticni period je \' +criticalPeriodMinutes + \'min\' + criticalPeriodSecunds \'s !\';'."\n".                                                     
-				'												sendEmail(recipients, emailTitle, emailContent);'."\n".
-				'												updateNotificationVSXMLState(filePath, 2);'."\n".
-				'												updateNotificationVSXMLErrorMessageTime(filePath, currentTime);'."\n".
-				'												break;'"\n".	
-                '            		                  case 2: emailTitle = \'Obavijest sustava GSN\';'."\n".
-				'            				                  emailContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\n senzor \' + sensorName + \' nije primio poruku \' + timeDifferenceMinutes + \' min\' + timeDifferenceSecunds \'s !!!\nKriticni period je \' +criticalPeriodMinutes + \'min\' + criticalPeriodSecunds \'s !\nObavijesti mozete iskljuciti na linku http://www.gsn.com?watchdog_id='.$id.'\';'."\n". 
-                '            				                  if((currentTime-lastErrorMessageTime) >= delay ){'."\n".
-                '                                               sendEmail(recipients, emailTitle, emailContent);'."\n".
-                '                                               updateNotificationVSXMLErrorMessageTime(filePath, currentTime);'."\n".
-                '            				                  }'."\n".
-                '            				                  break;'."\n".                    	
-                '        	                       }'."\n".
-                '                          }'."\n".   
-                '                      }]]></param>'."\n".
-                '    </init-params>' . "\n" .
-                '    <output-structure />' . "\n" .
-                '  </processing-class>' . "\n" .
-                '  <description>                   </description>' . "\n" .
-                '  <addressing />' . "\n" .
-                '  <storage history-size="1" />' . "\n" .
-                '  <streams>' . "\n" .
-                '    <stream name="stream1">' . "\n" .
-                '      <source alias="source1" storage-size="1" sampling-rate="1">' . "\n" .
-                '        <address wrapper="local">' . "\n" .
-                '          <predicate key="name">'.$sensor_data['sensor_name'].'</predicate>' . "\n" .
-                '        </address>' . "\n" .
-                '        <query>select * from wrapper</query>' . "\n" .
-                '      </source>' . "\n" .
-                '      <query>select * from source1</query>' . "\n" .
-                '    </stream>' . "\n" .
-                '  </streams>' . "\n" .
-                '</virtual-sensor>';
-        return $xml;
-    }
+		$xml = '<?xml version="1.0" encoding="UTF-8"?>' . "\n" .
+		        '<virtual-sensor name="' . $email_notification['xml_name'].'" priority="10">' . "\n" .
+		        '  <processing-class>' . "\n" .
+		        '    <class-name>gsn.processor.ScriptletProcessor</class-name>' . "\n" .
+		        '    <init-params>' . "\n" .
+		        '      <param name="persistant">false</param>' . "\n" .
+		        '      <param name="notification-state">1</param>' . "\n" .
+		        '      <param name="scriptlet"><![CDATA[' . "\n" .
+		        '                    //this is a start of a scriptlet' . "\n" .
+		        '                    //data definition' . "\n" .
+		        '' . "\n" .
+		        '                    lastProcessedTime = System.currentTimeMillis();  '. "\n" .
+		        '                    def filePath ="virtual-sensors/' . $email_notification['xml_name'] . '.xml";' . "\n" .
+		        '                    def recipients = ["' . $email_notification['email'] . '"]; // Define one or more recipients' . "\n" .
+		        '' . "\n" .
+		        '' . "\n" .
+		        '                    def EmailTitle ="Obavijest sustava GSN!!!";' . "\n" .
+		        '                    def emailContent="";' . "\n" .
+		        ' ' . "\n" .
+		        '                    //end of data definition' . "\n" .
+		        ' ' . "\n" .
+		        ' ' . "\n" .
+		        '					 if (notificationState == 0){ '. "\n" .
+		        '    	             	updateNotificationVSXMLState(filePath, 1); '. "\n" .
+		        '                       emailContent=\'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\\n nadzor senzora \' + sensorName + \' je ponovno ukljucen!!!\'; '."\n".
+		        '                       sendEmail(recipients, emailTitle, emailContent); '. "\n" .
+		        '                    }else if (notificationState == 2){  '."\n".
+		        '    	                updateNotificationVSXMLState(filePath, 1); '."\n".
+		        '                       emailContent=\'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\\n senzor \' + sensorName + \' je proradio!!!\'; '."\n".
+		        '                       sendEmail(recipients, emailTitle, emailContent); '."\n".
+		        '                    }]]></param>' . "\n" .
+		        '      <param name="sensor-name">'.$sensor_data['sensor_name'].'</param>'. "\n" .
+		        '      <param name="last-error-message-time">0</param>'. "\n" .
+					'	   <param name="delay">'.$email_notification['minimal_delay_between_emails'].'</param>'. "\n" .
+		        '      <param name="period">'.$email_notification['critical_period'].'</param>'. "\n" .
+					'	   <param name="scriplet-periodic"><![CDATA['. "\n".
+					'                    def filePath ="virtual-sensors/' . $email_notification['xml_name'] . '.xml";' . "\n" .
+					'                    def recipients = ["' . $email_notification['email'] . '"]; // Define one or more recipients' . "\n" .	
+					'					 def emailTitle =\'\';'."\n".
+		        '                    def emailContent=\'\';'."\n".
+		             
+		        '                    def currentTime = System.currentTimeMillis();'."\n\n".
+		        '                    if ( ! isdef(\'lastProcessedTime\')) { '. "\n".
+		        '                          lastProcessedTime = currentTime;'."\n".
+		        '                    }'."\n".
+		        '                    else {'."\n".
+		        '                          def timeDifference = currentTime - lastProcessedTime;'."\n".
+		        '                          def criticalPeriodMinutes = criticalPeriod/60000;'."\n".
+		        '                          def criticalPeriodSeconds = criticalPeriod%60000;'."\n".
+		        '                          if (timeDifference >= criticalPeriod) {'."\n".
+		        '        	                      switch(notificationState){'."\n".
+		        '        			                  case 0: break;'."\n".      			
+		        '        			                  case 1:	emailTitle = \'Obavijest sustava GSN\';'."\n".
+		        '            				                    emailContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\\nsenzor \' + sensorName +  \'je prestao primati ocitanja!!!\\nOve obavijesti sustav salje ukoliko osjetilo nije primilo ocitanje barem \' +criticalPeriodMinutes + \'min\' + criticalPeriodSeconds + \'s !\';'."\n".                                                     
+					'												sendEmail(recipients, emailTitle, emailContent);'."\n".
+					'												updateNotificationVSXMLState(filePath, 2);'."\n".
+					'												updateNotificationVSXMLErrorMessageTime(filePath, currentTime);'."\n".
+					'												break;'."\n".	
+		        '            		                  case 2: emailTitle = \'Obavijest sustava GSN\';'."\n".
+					'            				                  emailContent = \'Korisnice '.$user_data['first_name'].' '.$user_data['last_name'].',\\n senzor \' + sensorName + \' je prestao primati ocitanja!!!\\nOve obavijesti sustav salje ukoliko osjetilo nije primilo ocitanje barem \' +criticalPeriodMinutes + \'min\' + criticalPeriodSeconds + \' s !\\nObavijesti mozete iskljuciti na linku http://www.gsn.com?watchdog_id='.$id.'\';'."\n". 
+		        '            				                  if((currentTime-lastErrorMessageTime) >= delay ){'."\n".
+		        '                                               sendEmail(recipients, emailTitle, emailContent);'."\n".
+		        '                                               updateNotificationVSXMLErrorMessageTime(filePath, currentTime);'."\n".
+		        '            				                  }'."\n".
+		        '            				                  break;'."\n".                    	
+		        '        	                       }'."\n".
+		        '                          }'."\n".   
+		        '                      }]]></param>'."\n".
+		        '    </init-params>' . "\n" .
+		        '    <output-structure />' . "\n" .
+		        '  </processing-class>' . "\n" .
+		        '  <description>Nadzor senzora '.$sensor_data['sensor_name'].'</description>' . "\n" .
+		        '  <addressing />' . "\n" .
+		        '  <storage history-size="1" />' . "\n" .
+		        '  <streams>' . "\n" .
+		        '    <stream name="stream1">' . "\n" .
+		        '      <source alias="source1" storage-size="1" sampling-rate="1">' . "\n" .
+		        '        <address wrapper="local">' . "\n" .
+		        '          <predicate key="name">'.$sensor_data['sensor_name'].'</predicate>' . "\n" .
+		        '        </address>' . "\n" .
+		        '        <query>select * from wrapper</query>' . "\n" .
+		        '      </source>' . "\n" .
+		        '      <query>select * from source1</query>' . "\n" .
+		        '    </stream>' . "\n" .
+		        '  </streams>' . "\n" .
+		        '</virtual-sensor>';
+		return $xml;
+	    }
 }

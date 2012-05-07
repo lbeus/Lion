@@ -20,7 +20,7 @@ $this->breadcrumbs = array(
 
 	$gMap = new EGMap();
 	$gMap->setHeight(400);
-	$gMap->setWidth(600);
+	$gMap->setWidth(550);
 
 	$gMap->zoom = 7;
 	$mapTypeControlOptions = array(

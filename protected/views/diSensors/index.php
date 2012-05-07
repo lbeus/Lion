@@ -1,17 +1,28 @@
 <?php
-$this->breadcrumbs=array(
-	'Di Sensors',
-);
-
-$this->menu=array(
-	array('label'=>'Create DiSensors', 'url'=>array('create')),
-	array('label'=>'Manage DiSensors', 'url'=>array('admin')),
+$this->breadcrumbs = array(
+    'Sensors',
 );
 ?>
+<div class="post">
+    <p class="date"><?php echo date("M"); ?><b><?php echo date("j"); ?></b></p>
+    <h2 class="title">Sensor table</h2>
+    <p class="posted">Lion development team</p>
+    <div class="entry">
 
-<h1>Di Sensors</h1>
+	<p>If you need further managing, proceed with following links:</p>
+	<?php
+	echo "<ul>";
+	echo "<li>" . CHtml::link('Create sensors', array('diSensors/create')) . "</li>";
+	echo "<li>" . CHtml::link('Manage sensors', array('diSensors/admin')) . "</li>";
+	echo "</ul>";
+	?>
 
-<?php $this->widget('zii.widgets.CListView', array(
-	'dataProvider'=>$dataProvider,
-	'itemView'=>'_view',
-)); ?>
+	<?php
+	$this->widget('zii.widgets.CListView', array(
+	    'dataProvider' => $dataProvider,
+	    'itemView' => '_view',
+	));
+	?>
+
+    </div>
+</div>
