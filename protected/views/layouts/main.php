@@ -207,7 +207,7 @@
 	    <div class="content-bg">
 		<div id="column1">
 		    <div class="box1">
-			<h2>What is GSN2?</h2>
+			<h2>What is GSN</h2>
 			<p><a href ="http://sourceforge.net/apps/trac/gsn/">GSN</a> stands for Global sensor networks project. Basically it is a web server that collects various data from multiple sources.</p>
 		    </div>
 		    <div class="box2">
