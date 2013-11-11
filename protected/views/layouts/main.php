@@ -102,7 +102,7 @@
 			<li <?php if ($this->breadcrumbs[0] == "Sensors") echo 'class="first"' ?>><?php echo CHtml::link('<span>Sensors</span>', array('/user/userSensors')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Notification" || $this->breadcrumbs[0]=='Notification requests') echo 'class="first"' ?>><?php echo CHtml::link('<span>Notifications</span>', array('/user/userNotifications')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "GSN managing") echo 'class="first"' ?>><?php echo CHtml::link('<span>System</span>', array('/systemManaging/heatingControl')); ?></li>
-			<li <?php if ($this->breadcrumbs[0] == "Watchdog timers") echo 'class="first"' ?>><?php echo CHtml::link('<span>Watchdog</span>', array('/user/userWatchdogTimer')); ?></li>			
+			<li <?php if ($this->breadcrumbs[0] == "Watchdog timers") echo 'class="first"' ?>><?php echo CHtml::link('<span>Watchdog</span>', array('/user/userWatchdogTimer')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Reports" || $this->breadcrumbs[0] =="New report subscription" || $this->breadcrumbs[0] =="Report subscriptions" || $this->breadcrumbs[0] =="Daily reports" || $this->breadcrumbs[0] =="Monthly reports") echo 'class="first"' ?>><?php echo CHtml::link('<span>Reports</span>', array('/reportSubscription/userReportsMain')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Graphs") echo 'class="first"' ?>><?php echo CHtml::link('<span>Graphs</span>', array('/graphs/graphs')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Contact")echo 'class="first"' ?>><?php echo CHtml::link('<span>Contact</span>', array('/site/contact')); ?></li>
@@ -207,7 +207,7 @@
 	    <div class="content-bg">
 		<div id="column1">
 		    <div class="box1">
-			<h2>What is GSN?</h2>
+			<h2>What is GSN2?</h2>
 			<p><a href ="http://sourceforge.net/apps/trac/gsn/">GSN</a> stands for Global sensor networks project. Basically it is a web server that collects various data from multiple sources.</p>
 		    </div>
 		    <div class="box2">
