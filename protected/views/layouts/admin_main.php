@@ -31,17 +31,20 @@
 			<li <?php if ($this->breadcrumbs[0] == "Login") echo 'class="first"' ?>><?php echo CHtml::link('<span>Login</span>', array('/site/login')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Registration") echo 'class="first"' ?>><?php echo CHtml::link('<span>Registration</span>', array('/site/registrationForm')); ?></li>
 		    <?php elseif (Yii::app()->user->group==1) : ?>
-			<li <?php if ($this->breadcrumbs[0] == "") echo 'class="first"' ?>><?php echo CHtml::link('<span>Home</span>', array('/site/index')); ?></li>
+			<li <?php if ($this->breadcrumbs[0] == "") echo 'class="first"' ?>><?php echo CHtml::link('<span>Home</span>', array('/user/userPersonal')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Home") echo 'class="first"' ?>><?php echo CHtml::link('<span>Admin</span>', array('/admin/index')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Users"
 				|| $this->breadcrumbs[0] == "Update user"
 				|| $this->breadcrumbs[0] == "Manage users"
 				|| $this->breadcrumbs[0] == "View user"
-				|| $this->breadcrumbs[0] == "GSN privileges") echo 'class="first"' ?>><?php echo CHtml::link('<span>Users</span>', array('/prodUsers/index')); ?></li>
+				|| $this->breadcrumbs[0] == "Create user"
+				|| $this->breadcrumbs[0] == "GSN privileges"
+				|| $this->breadcrumbs[0] == "User activation") echo 'class="first"' ?>><?php echo CHtml::link('<span>Users</span>', array('/prodUsers/index')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "GSN Servers"
 				|| $this->breadcrumbs[0] == "Update GSN"
 				|| $this->breadcrumbs[0] == "Manage GSN"
-				|| $this->breadcrumbs[0] == "View GSN") echo 'class="first"' ?>><?php echo CHtml::link('<span>GSN</span>', array('/diGsn/index')); ?></li>
+				|| $this->breadcrumbs[0] == "View GSN"
+				|| $this->breadcrumbs[0] == "Create GSN server") echo 'class="first"' ?>><?php echo CHtml::link('<span>GSN</span>', array('/diGsn/index')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Reports managing") echo 'class="first"' ?>><?php echo CHtml::link('<span>Reports managing</span>', array('/admin/adminReportsManaging')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Notification managing") echo 'class="first"' ?>><?php echo CHtml::link('<span>Notification managing</span>', array('/admin/adminNotificationRequests')); ?></li>
 			<li <?php if ($this->breadcrumbs[0] == "Watchdog timers managing") echo 'class="first"' ?>><?php echo CHtml::link('<span>Watchdog managing</span>', array('/admin/adminWatchdogRequests')); ?></li>
@@ -125,7 +128,7 @@
 		<div id="column1">
 		    <div class="box1">
 			<h2>What is GSN?</h2>
-			<p>GSN stands for Global sensor networks project. Basically it is a web server that collects various data from multiple sources.</p>
+			<p><a href ="http://sourceforge.net/apps/trac/gsn/">GSN</a> stands for Global sensor networks project. Basically it is a web server that collects various data from multiple sources.</p>
 		    </div>
 		    <div class="box2">
 			<h2>What is RASIP?</h2>
@@ -142,9 +145,8 @@
 	    <div class="bgbtm"></div>
 	</div>
         <div id="footer">
-            <p>Copyright &copy; <?php echo date('Y'); ?> by FER.</p>
+            <p>Copyright &copy; <?php echo date('Y'); ?> by FER, University of Zagreb.</p>
             <p>All Rights Reserved.</p>
-            <p>Matija Renić, Luka Postružin.</p>
         </div><!-- footer -->
     </body>
 </html>

@@ -32,7 +32,7 @@ class GraphController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->layout('graph-main');
+		// $this->layout('graph-main');
 		$this->render('index');
 	}
 
@@ -40,7 +40,7 @@ class GraphController extends Controller
 	{
 		// renders the view file 'protected/views/site/index.php'
 		// using the default layout 'protected/views/layouts/main.php'
-		$this->layout('graph-main');
+		// $this->layout('graph-main');
 		$this->render('graphs');
 	}
 
@@ -54,7 +54,7 @@ class GraphController extends Controller
 	    	if(Yii::app()->request->isAjaxRequest)
 	    		echo $error['message'];
 	    	else {
-	        	$this->layout('graph-main');
+	        	// $this->layout('graph-main');
 	        	$this->render('error', $error);
 	    	}
 	    }
@@ -77,7 +77,7 @@ class GraphController extends Controller
 				$this->refresh();
 			}
 		}
-		$this->layout('graph-main');
+		// $this->layout('graph-main');
 		$this->render('contact',array('model'=>$model));
 	}
 

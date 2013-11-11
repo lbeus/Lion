@@ -82,14 +82,16 @@ hr {
 /** HEADER */
 
 #header-wrapper {
-    height: 161px;
-    background: url("../images/header-bg.png") repeat-x left top;
+    /**height: 161px;
+    background: url("../images/header-bg.png") repeat-x left top;**/
+    height: 100px;
+    background: url("../images/header-bg_small.png") repeat-x left top;
 }
 
 #header {
     overflow: hidden;
     width: 940px;
-    height: 161px;
+    height: 100px;
     margin: 0px auto;
 }
 
@@ -107,7 +109,7 @@ hr {
 #logo h1 a {
     display: block;
     float: left;
-    padding: 65px 0px 0px 0px;
+    padding: 30px 0px 0px 0px;
     letter-spacing: -2px;
     text-decoration: none;
     text-shadow: 2px 2px 2px #222222;
@@ -117,7 +119,7 @@ hr {
 
 #logo p {
     float: right;
-    padding: 85px 0px 0px 0px;
+    padding: 60px 0px 0px 0px;
     text-shadow: 1px 1px 1px #222222;
     font-family: 'Oswald', sans-serif;
     font-size: 18px;
@@ -127,7 +129,7 @@ hr {
 /** MENU */
 
 #menu-wrapper {
-    width: 954px;
+    width: 950px;
     height: 77px;
     margin: 30px auto 0px auto;
     padding: 0px 60px;
@@ -571,7 +573,7 @@ hr {
     background: url("../images/banner-image-border.jpg") no-repeat left top;
 }
 
-#banner .image, #banner .caption1, #banner .caption2, #banner .border {
+#banner .image, #banner .caption1, #banner .caption2 {
     position: absolute;
 }
 
@@ -647,3 +649,14 @@ div.compactRadioGroup INPUT {
 #type5 .topRight {height:140px;}
 #type5 .bottomLeft {background-position:-1px -142px;}
 #type5 .bottomRight {background-position:-19px -142px;}
+
+.nbanner { position: relative; padding:0; margin:0; font: normal 12px Arial,Helvetica,sans-serif; }
+.nbanner a img { border:none; padding:0; margin:0; }
+.nbanner ul{ padding:0; margin: 0; }
+.nbanner ul.slides { margin:0; }
+.nbanner ul.slides li.slide { list-style-type:none; visibility:hidden; position:absolute; left:0; top:0; }
+.nbanner ul.buttons { }
+.nbanner ul.buttons li { float:left; font-size: 10px; display:inline; height:0px; width: 14px; padding:14px 0 0 0; margin:0 0 0 5px; background: url('bgli.gif') 0 0 no-repeat; cursor: pointer; overflow: hidden; }
+.nbanner ul.buttons li:hover { background: url('bgli.gif') -15px 0 no-repeat; }
+.nbanner ul.buttons li.active{ background: url('bgli.gif') -30px 0 no-repeat; }
+.nbanner .cclear{ clear: both; }
